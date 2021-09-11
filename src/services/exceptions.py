@@ -1,0 +1,6 @@
+class NotAllowed:
+    ...
+
+
+class NotFound:
+    ...

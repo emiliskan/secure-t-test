@@ -15,3 +15,8 @@ class AbstractModel(BaseModel):
         # Replace default lib for json to faster orjson
         json_loads = orjson.loads
         json_dumps = orjson_dumps
+
+
+class ListQuery(AbstractModel):
+    offset: int
+    limit: int
