@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String
-from schemas.base import AbstractModel
+from db.models.base import AbstractModel
 
 
 class Post(AbstractModel):

@@ -9,6 +9,10 @@ sqlalchemy = "*"
 pytest = "*"
 pytest-asyncio = "*"
 aiohttp = "*"
+uvicorn = "*"
+orjson = "*"
+asyncpg = "*"
+alembic = "*"
 
 [dev-packages]
 

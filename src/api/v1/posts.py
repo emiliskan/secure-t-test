@@ -2,6 +2,7 @@ import logging
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from db.models.post import Post
 from services.posts import PostsService, get_post_service
 from services.exceptions import NotAllowed, NotFound
 from schemas.post import PostSchema
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 async def get_posts(
         query: ListQuery,
         service: PostsService = Depends(get_post_service),
-):
+) -> list[Post]:
     return await service.read(query)
 
 
@@ -30,7 +31,7 @@ async def get_posts(
 async def create(
         post: PostSchema,
         service: PostsService = Depends(get_post_service),
-):
+) -> None:
     await service.create(post)
 
 
@@ -42,7 +43,7 @@ async def create(
 async def get(
         post_id: str = Query(None, description="Post ID"),
         service: PostsService = Depends(get_post_service),
-) -> dict:
+) -> Post:
 
     try:
         post = await service.get(post_id)
@@ -57,9 +58,9 @@ async def get(
     description="Remove post."
 )
 async def delete(
-        post_id: str = Query(None, description="Post ID"),
+        post_id: int = Query(None, description="Post ID"),
         service: PostsService = Depends(get_post_service),
-):
+) -> None:
     try:
         await service.delete(post_id)
     except NotAllowed:
@@ -69,13 +70,13 @@ async def delete(
 
 
 @router.patch(
-    "/post/{post_id}",
+    "/posts/{post_id}",
     description="Update post.",
     response_model=PostSchema
 )
 async def update_review(
         post: PostSchema,
-        post_id: str = Query(None, description="Post ID"),
+        post_id: int = Query(None, description="Post ID"),
         service: PostsService = Depends(get_post_service),
 ) -> None:
 

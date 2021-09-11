@@ -1,6 +1,6 @@
-class NotAllowed:
+class NotAllowed(BaseException):
     ...
 
 
-class NotFound:
+class NotFound(BaseException):
     ...

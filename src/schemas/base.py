@@ -8,8 +8,7 @@ def orjson_dumps(v, *, default):
     return orjson.dumps(v, default=default).decode()
 
 
-class AbstractModel(BaseModel):
-    id: int
+class BaseOrjsonModel(BaseModel):
 
     class Meta:
         # Replace default lib for json to faster orjson
@@ -17,6 +16,10 @@ class AbstractModel(BaseModel):
         json_dumps = orjson_dumps
 
 
-class ListQuery(AbstractModel):
+class AbstractModel(BaseOrjsonModel):
+    id: int
+
+
+class ListQuery(BaseOrjsonModel):
     offset: int
     limit: int
