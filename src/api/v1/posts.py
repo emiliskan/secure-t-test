@@ -31,8 +31,8 @@ async def get_posts(
 async def create(
         post: PostSchema,
         service: PostsService = Depends(get_post_service),
-) -> None:
-    await service.create(post)
+) -> Post:
+    return await service.create(post)
 
 
 @router.get(
@@ -41,7 +41,7 @@ async def create(
     response_model=PostSchema
 )
 async def get(
-        post_id: str = Query(None, description="Post ID"),
+        post_id: int = Query(None, description="Post ID"),
         service: PostsService = Depends(get_post_service),
 ) -> Post:
 
@@ -72,16 +72,15 @@ async def delete(
 @router.patch(
     "/posts/{post_id}",
     description="Update post.",
-    response_model=PostSchema
 )
-async def update_review(
+async def update_post(
         post: PostSchema,
         post_id: int = Query(None, description="Post ID"),
         service: PostsService = Depends(get_post_service),
-) -> None:
+) -> Post:
 
     try:
-        await service.update(post_id, post)
+        return await service.update(post_id, post)
     except NotAllowed:
         raise HTTPException(status_code=HTTPStatus.METHOD_NOT_ALLOWED)
     except NotFound:
