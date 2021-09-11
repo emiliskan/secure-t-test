@@ -1,0 +1,29 @@
+version: "3"
+
+x-env: &x-env
+  env_file:
+    - env_file
+
+services:
+  db:
+    container_name: secure-t-db
+    image: postgres
+    ports:
+      - 15436:5432
+    <<: *x-env
+  nginx:
+    container_name: secure-t-nginx
+    image: nginx:1.19.5
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/configs:/etc/nginx/conf.d:ro
+    ports:
+      - 5000:80
+    restart: unless-stopped
+  api:
+    container_name: secure-t-api
+    build:
+      context: ./src
+    depends_on:
+      - db
+    <<: *x-env
