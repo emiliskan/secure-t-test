@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
-from api.v1 import posts
+from api.v1 import posts, comments
 from core import config
 from core.logger import LOGGING
 
@@ -22,6 +22,7 @@ async def startup():
     pass
 
 app.include_router(posts.router, prefix="/v1", tags=["Posts"])
+app.include_router(comments.router, prefix="/v1", tags=["Comments"])
 
 
 @app.on_event("shutdown")

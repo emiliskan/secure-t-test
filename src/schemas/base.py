@@ -17,7 +17,7 @@ class BaseOrjsonModel(BaseModel):
 
 
 class AbstractModel(BaseOrjsonModel):
-    id: int
+    id: int = None
 
 
 class ListQuery(BaseOrjsonModel):
