@@ -10,10 +10,6 @@ from schemas.post import PostSchema
 from services.exceptions import NotFound
 
 
-class UserNotFound(Exception):
-    ...
-
-
 class PostsService:
 
     def __init__(self, db: Session):
@@ -36,16 +32,18 @@ class PostsService:
         )
         return posts.all()
 
-    async def create(self, post: PostSchema) -> None:
+    async def create(self, post: PostSchema) -> Post:
         db_post = Post(**post.dict())
         self.db.add(db_post)
         await self.db.commit()
+        return db_post
 
-    async def update(self, post_id: int, post: PostSchema) -> None:
+    async def update(self, post_id: int, post: PostSchema) -> Post:
         db_post = await self.get(post_id)
         db_post.update(**post.dict(exclude_none=True))
 
         await self.db.commit()
+        return db_post
 
     async def delete(self, post_id: int) -> None:
         db_post = await self.get(post_id)

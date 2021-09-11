@@ -34,6 +34,7 @@ config.set_main_option(
 # target_metadata = mymodel.Base.metadata
 from db.database import Base
 from db.models.post import Post
+from db.models.comments import Comment
 
 target_metadata = Base.metadata
 
