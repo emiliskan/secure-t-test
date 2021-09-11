@@ -21,7 +21,7 @@ app = FastAPI(
 async def startup():
     pass
 
-app.include_router(posts.router, prefix="/v1/users", tags=["Users"])
+app.include_router(posts.router, prefix="/v1", tags=["Posts"])
 
 
 @app.on_event("shutdown")

@@ -1,7 +1,9 @@
 from schemas.base import AbstractModel
 
 
-class Post(AbstractModel):
+class PostSchema(AbstractModel):
+
+    text: str
 
     class Config:
         orm_mode = True

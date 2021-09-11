@@ -33,7 +33,7 @@ config.set_main_option(
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from db.database import Base
-from db.models.post import UserDatabase
+from db.models.post import Post
 
 target_metadata = Base.metadata
 

@@ -29,16 +29,17 @@ def event_loop():
 
 
 @pytest.fixture(autouse=True, scope="session")
-async def init_data(postgres_client):
+async def init_data():
     # TODO: init data
     pass
 
 
 @pytest.fixture
 def make_get_request(session):
-    async def inner(method: str, params: dict = None, headers: dict = None) -> HTTPResponse:
+
+    async def inner(method: str, params: dict = None, data: dict = None, headers: dict = None) -> HTTPResponse:
         url = f"http://{settings.API_SERVICE_URL}/{settings.API}/{method}"
-        async with session.get(url, params=params, headers=headers) as response:
+        async with session.get(url, params=params, headers=headers, json=data) as response:
             return HTTPResponse(
                 body=await response.json(),
                 headers=response.headers,
@@ -50,8 +51,9 @@ def make_get_request(session):
 
 @pytest.fixture
 def make_post_request(session):
-    async def inner(url: str, data: dict = None, headers: dict = None) -> HTTPResponse:
-        url = f"http://{url}"
+
+    async def inner(method: str, data: dict = None, headers: dict = None) -> HTTPResponse:
+        url = f"http://{settings.API_SERVICE_URL}/{settings.API}/{method}"
         async with session.post(url, json=data, headers=headers) as response:
             return HTTPResponse(
                 body=await response.json(),
@@ -63,10 +65,26 @@ def make_post_request(session):
 
 
 @pytest.fixture
-def make_put_request(session):
-    async def inner(url: str, data: dict = None, headers: dict = None) -> HTTPResponse:
-        url = f"http://{url}"
-        async with session.put(url, json=data, headers=headers) as response:
+def make_patch_request(session):
+
+    async def inner(method: str, data: dict = None, headers: dict = None) -> HTTPResponse:
+        url = f"http://{settings.API_SERVICE_URL}/{settings.API}/{method}"
+        async with session.patch(url, json=data, headers=headers) as response:
+            return HTTPResponse(
+                body=await response.json(),
+                headers=response.headers,
+                status=response.status,
+            )
+
+    return inner
+
+
+@pytest.fixture
+def make_delete_request(session):
+
+    async def inner(method: str, headers: dict = None) -> HTTPResponse:
+        url = f"http://{settings.API_SERVICE_URL}/{settings.API}/{method}"
+        async with session.delete(url, headers=headers) as response:
             return HTTPResponse(
                 body=await response.json(),
                 headers=response.headers,
