@@ -2,6 +2,8 @@ import logging
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from core.auth import auth
 from db.models.post import Post
 from services.posts import PostsService, get_post_service
 from services.exceptions import NotAllowed, NotFound
@@ -31,8 +33,9 @@ async def get_posts(
 async def create(
         post: PostSchema,
         service: PostsService = Depends(get_post_service),
+        user_id: int = Depends(auth),
 ) -> Post:
-    return await service.create(post)
+    return await service.create(user_id, post)
 
 
 @router.get(
@@ -60,9 +63,10 @@ async def get(
 async def delete(
         post_id: int = Query(None, description="Post ID"),
         service: PostsService = Depends(get_post_service),
+        user_id: int = Depends(auth),
 ) -> None:
     try:
-        await service.delete(post_id)
+        await service.delete(user_id, post_id)
     except NotAllowed:
         raise HTTPException(status_code=HTTPStatus.METHOD_NOT_ALLOWED)
     except NotFound:
@@ -77,10 +81,11 @@ async def update_post(
         post: PostSchema,
         post_id: int = Query(None, description="Post ID"),
         service: PostsService = Depends(get_post_service),
+        user_id: int = Depends(auth),
 ) -> Post:
 
     try:
-        return await service.update(post_id, post)
+        return await service.update(user_id, post_id, post)
     except NotAllowed:
         raise HTTPException(status_code=HTTPStatus.METHOD_NOT_ALLOWED)
     except NotFound:

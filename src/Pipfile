@@ -13,6 +13,8 @@ uvicorn = "*"
 orjson = "*"
 asyncpg = "*"
 alembic = "*"
+werkzeug = "*"
+pyjwt = "*"
 
 [dev-packages]
 

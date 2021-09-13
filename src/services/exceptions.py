@@ -1,6 +1,10 @@
-class NotAllowed(BaseException):
+class NotAllowed(Exception):
     ...
 
 
-class NotFound(BaseException):
+class NotFound(Exception):
+    ...
+
+
+class AuthFailed(Exception):
     ...
