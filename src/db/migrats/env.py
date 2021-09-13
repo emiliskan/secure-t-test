@@ -35,6 +35,7 @@ config.set_main_option(
 from db.database import Base
 from db.models.post import Post
 from db.models.comments import Comment
+from db.models.user import User
 
 target_metadata = Base.metadata
 

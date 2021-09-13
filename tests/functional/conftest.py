@@ -1,9 +1,10 @@
+import asyncio
+import time
 from dataclasses import dataclass
 
 import pytest
 import aiohttp
-import asyncio
-
+import jwt
 from multidict import CIMultiDictProxy
 
 import settings
@@ -21,6 +22,20 @@ async def session():
     session = aiohttp.ClientSession()
     yield session
     await session.close()
+
+
+@pytest.fixture
+async def auth_header(auth) -> dict:
+    return {"Authorization": f"Bearer {auth}"}
+
+
+@pytest.fixture
+async def auth() -> str:
+    playload = {
+        "sub": settings.USER_ID,
+        "exp": time.time() + 100500
+    }
+    return jwt.encode(playload, settings.JWT_SECRET, settings.JWT_ALGORITHM)
 
 
 @pytest.fixture(scope="session")

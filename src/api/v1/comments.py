@@ -3,6 +3,7 @@ from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
+from core.auth import auth
 from db.models.comments import Comment
 from schemas.comment import CommentSchema
 from services.comments import get_comments_service
@@ -34,8 +35,9 @@ async def get_comments(
 async def create(
         comment: CommentSchema,
         service: CommentsService = Depends(get_comments_service),
+        user_id: int = Depends(auth),
 ) -> Comment:
-    return await service.create(comment)
+    return await service.create(user_id, comment)
 
 
 @router.delete(
@@ -45,9 +47,10 @@ async def create(
 async def delete(
         comment_id: int = Query(None, description="Comment ID"),
         service: CommentsService = Depends(get_comments_service),
+        user_id: int = Depends(auth),
 ) -> None:
     try:
-        await service.delete(comment_id)
+        await service.delete(user_id, comment_id)
     except NotAllowed:
         raise HTTPException(status_code=HTTPStatus.METHOD_NOT_ALLOWED)
     except NotFound:
@@ -62,10 +65,11 @@ async def update_comment(
         comment: CommentSchema,
         comment_id: int = Query(None, description="Comment ID"),
         service: CommentsService = Depends(get_comments_service),
+        user_id: int = Depends(auth),
 ) -> Comment:
 
     try:
-        await service.update(comment_id, comment)
+        await service.update(user_id, comment_id, comment)
     except NotAllowed:
         raise HTTPException(status_code=HTTPStatus.METHOD_NOT_ALLOWED)
     except NotFound:

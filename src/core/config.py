@@ -16,3 +16,6 @@ POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "94c3b047-d080-4b77-bd10-8caf
 
 SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@" \
                           f"{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB_NAME}"
+
+JWT_SECRET = os.getenv("JWT_SECRET", "dev_secret")
+JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
